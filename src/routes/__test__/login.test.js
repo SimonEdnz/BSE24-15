@@ -2,10 +2,10 @@ import { expect, test } from "vitest";
 
 test("returns a 200 on successful signin", async () => {
   const mockUser = {
-    firstName: "John",
-    lastName: "Doe",
+    firstName: "shema",
+    lastName: "collins",
     gender: "male",
-    email: "johndoe@gmail.com",
+    email: "shemashetou@gmail.com",
     phoneNumber: "0787489045",
     role: "superadmin",
     password: "password",
