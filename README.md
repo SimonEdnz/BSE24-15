@@ -43,4 +43,5 @@ To generate your own Firebase Cloud storage config variables follow this [articl
 
 This project is still on going. Some features have not been implemented yet
 
-exercise 2
+exercise 3 
+deploying and autobuild 
