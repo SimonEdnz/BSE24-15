@@ -1,10 +1,14 @@
+
 const express = require("express");
 const cors = require("cors");
 // const path = require("path");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const { chatHandler } = require("./controllers/chatController");
+const monitoringRoutes = require("./routes/monitoringRoutes");
+
 const { errorHandler } = require("./controllers/errorController");
+const { startRequestMonitoringTimer,endRequestMonitoringTimer, } = require("./controllers/monitoringController");
 const { keepActiveController } = require("keep-apps-active");
 const app = express();
 
@@ -33,9 +37,13 @@ app.use(express.json());
 // app.set("view engine", "ejs");
 // app.set("views", path.join(__dirname, "views"));
 // app.use(express.static(path.join(__dirname, "views")));
+app.use(startRequestMonitoringTimer);
 
 app.use("/api/users", userRoutes);
 app.use("/api/chats", chatRoutes);
+app.use(monitoringRoutes);
+
+app.use(endRequestMonitoringTimer);
 
 // chats
 chatHandler(io);
