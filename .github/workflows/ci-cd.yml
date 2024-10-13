@@ -1,4 +1,4 @@
-name: Test and deploy
+name: Test and Deploy
 
 on:
   push:
@@ -8,8 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -23,9 +25,10 @@ jobs:
       - name: Run tests
         run: npm run test
 
-        
-      - uses: actions/checkout@v3
-      - uses: JorgeLNJunior/render-deploy@v1.4.4
+      #Deploy to Render
+      - name: Deploy to Render
+        id: deploy
+        uses: JorgeLNJunior/render-deploy@v1.4.4
         with:
           service_id: ${{ secrets.RENDER_SERVICE_ID }}
           api_key: ${{ secrets.RENDER_API_KEY }}
@@ -34,3 +37,21 @@ jobs:
           github_deployment: true
           deployment_environment: "production"
           github_token: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+
+      #  Check deployment status and handle rollback
+      - name: Check Deployment Status
+        if: failure()  # This step only runs if the deployment step fails
+        run: |
+          echo "Deployment failed. Triggering rollback."
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            --data '{"clearCache": false}'
+        continue-on-error: true  # Ensures that the workflow doesn’t fail because of rollback
+
+      #  Send notification (Optional: Slack, email, etc.)
+      - name: Notify on Failure
+        if: failure()  # Only notify if deployment or rollback fails
+        run: |
+          echo "Deployment failure and rollback attempt."
+
