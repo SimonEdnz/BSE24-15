@@ -45,3 +45,19 @@ This project is still on going. Some features have not been implemented yet
 
 exercise 3 
 deploying and autobuild 
+
+
+// IMPORTANT COMMNANDS 
+
+// INITIALIZE PRISMA
+// npx prisma init --datasource-provider postgresql
+// npx prisma init --datasource-provider mysql
+
+// APPLY CHANGES TO ACTUAL DATABASE 
+// npx prisma migrate dev --name test1
+
+// GENERATE THE CLIENT TO INTERACT WITH THE DATABASE
+// npx prisma generate
+
+// TO EXPLORE AND MANUPLATE DATA USE PRISMA STUDIO
+// npx prisma studio
